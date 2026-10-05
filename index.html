@@ -26,13 +26,22 @@
   --icon:#f08a45; --field:#26321f; --hot:#ff6b6b; --flash:#4a4214; color-scheme:dark}
 
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5}
-.wrap{max-width:1360px;margin:0 auto;padding-block:20px 40px;padding-inline:16px;display:flex;flex-direction:column;gap:16px}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5}
+.wrap{max-width:1400px;margin:0 auto;padding-block:20px 40px;padding-inline:16px;display:flex;flex-direction:column;gap:16px}
 
-header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
-h1{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
-.lede{margin:2px 0 0;color:var(--muted);font-size:13px}
-.params{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;font-size:12px;color:var(--muted)}
+/* ---------- ヘッダー ---------- */
+header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+.title-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;min-width:0}
+h1{font-family:var(--display);font-size:22px;margin:0;white-space:nowrap}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.tab{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer;text-align:left;max-width:100%;display:flex;gap:6px;align-items:baseline}
+.tab b{font-family:var(--display);color:var(--accent);flex:none}
+.tab:hover{border-color:var(--accent)}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.tab[aria-selected="true"] b{color:var(--accent-fg)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.params{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:12px;color:var(--muted)}
 .params label{display:flex;align-items:center;gap:6px}
 .params input{width:52px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--fg);font-family:var(--mono);font-size:12px}
 .btn-ghost{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:4px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer}
@@ -43,6 +52,7 @@ h1{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
 .panel h2{font-family:var(--display);font-size:16px;margin:0 0 4px}
 .panel .hint{margin:0 0 14px;font-size:12px;color:var(--muted)}
+.panel .hint b{color:var(--fg)}
 
 /* ---------- プレビュー ---------- */
 .band-label{font-size:12px;font-weight:700;color:var(--icon);letter-spacing:.04em;margin-bottom:6px}
@@ -55,71 +65,68 @@ h1{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
 .band .badge{position:absolute;top:-4px;left:-4px;background:var(--accent);color:var(--accent-fg);font-size:10px;font-weight:700;padding:1px 6px;border-radius:9px;opacity:0;transition:opacity .15s}
 .band.active .badge{opacity:1}
 .band .lines{display:flex;flex-direction:column;gap:4px;min-width:0}
-.pv{background:var(--field);border:1px solid var(--line);border-radius:3px;padding:3px 8px;font-size:12px;min-height:26px;display:flex;align-items:center;gap:6px;min-width:0;transition:background .5s}
+.pv{background:var(--field);border:1px solid var(--line);border-radius:3px;padding:2px 4px 2px 8px;font-size:12px;min-height:28px;display:flex;align-items:center;gap:6px;min-width:0;transition:background .5s}
 .pv .txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
 .pv .txt.empty{color:var(--muted)}
 .pv.subject .txt:not(.empty){font-weight:700}
 .pv .src{flex:none;font-family:var(--mono);font-size:10px;color:var(--muted)}
-.pv input{border:0;background:transparent;color:var(--fg);font:inherit;width:100%;padding:0}
-.pv input:focus{outline:none}
 .pv.flash{background:var(--flash)}
+.pv.sender{cursor:text}
+.pv.sender input{border:0;border-bottom:1px dashed transparent;background:transparent;color:var(--fg);font:inherit;width:100%;padding:2px 0;cursor:text}
+.pv.sender:hover input{border-bottom-color:var(--muted)}
+.pv.sender input:focus{outline:none;border-bottom-color:var(--accent)}
+.pv.sender input::placeholder{color:var(--muted)}
+.clear{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:3px;font:inherit;font-size:10px;padding:1px 6px;cursor:pointer;line-height:1.6}
+.clear:hover:not(:disabled){border-color:var(--hot);color:var(--hot)}
+.clear:disabled{opacity:.35;cursor:default}
+.clear:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
 /* ---------- 選択画面 ---------- */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media (max-width:700px){.cols{grid-template-columns:1fr}}
-.col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.col{display:flex;flex-direction:column;gap:8px;min-width:0}
 .col-head{background:var(--accent);color:var(--accent-fg);text-align:center;font-family:var(--display);font-size:15px;padding:8px;border-radius:4px}
 .col-head small{display:block;font-family:var(--body);font-weight:400;font-size:11px;opacity:.85}
-.row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center}
-.row .no{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}
+.row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:stretch}
+.row .no{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;padding-top:9px}
 
-.field{position:relative;min-width:0;border:1px solid var(--line);border-radius:4px;background:var(--surface);height:42px}
+/* テキストと赤字表示を重ね、ミラー側が高さを決める（全文が常に見える） */
+.field{position:relative;min-width:0;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
 .field:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
-.field input,.field .mirror{position:absolute;inset:0;width:100%;height:100%;padding:0 58px 0 10px;font-family:var(--body);font-size:14px;line-height:40px;letter-spacing:0;border:0;margin:0}
-.field input{background:transparent;color:transparent;caret-color:var(--fg);z-index:2;outline:none}
-.field input::placeholder{color:var(--muted)}
-.field input::selection{background:var(--accent-soft);color:transparent}
-.field .mirror{white-space:pre;overflow:hidden;color:var(--fg);z-index:1;pointer-events:none}
-.field .mirror .hot{color:var(--hot);font-weight:700}
-.field .count{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;color:var(--muted);z-index:3;pointer-events:none;font-variant-numeric:tabular-nums;text-align:right;line-height:1.2}
-.field .count.full{color:var(--hot)}
+.field textarea,.field .mirror{display:block;width:100%;margin:0;border:0;padding:7px 10px 18px;font-family:var(--body);font-size:14px;line-height:22px;letter-spacing:0;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere}
+.field .mirror{min-height:calc(22px * 2 + 25px);color:var(--fg);pointer-events:none}
+.field .mirror .hot{color:var(--hot)}
+.field textarea{position:absolute;inset:0;height:100%;resize:none;overflow:hidden;background:transparent;color:transparent;caret-color:var(--fg);outline:none}
+.field textarea::placeholder{color:var(--muted)}
+.field textarea::selection{background:var(--accent-soft);color:transparent}
+.field .count{position:absolute;right:8px;bottom:3px;font-family:var(--mono);font-size:10px;color:var(--muted);pointer-events:none;font-variant-numeric:tabular-nums;line-height:1.2}
 
-.reflect{border:1px solid var(--accent);background:var(--surface);color:var(--accent);border-radius:4px;height:42px;min-width:48px;padding:0 8px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;writing-mode:horizontal-tb}
+.reflect{border:1px solid var(--accent);background:var(--surface);color:var(--accent);border-radius:4px;min-width:48px;padding:0 8px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
 .reflect:hover:not(:disabled){background:var(--accent);color:var(--accent-fg)}
 .reflect:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .reflect:disabled{opacity:.4;cursor:not-allowed}
 
-.status{font-size:12px;color:var(--muted);min-height:18px}
-.status b{color:var(--fg)}
-
-.spec{font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px}
-.spec ul{margin:4px 0 0;padding-left:18px;display:grid;gap:2px}
-
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
 <body>
-
 <div class="wrap">
   <header class="top">
-    <div>
+    <div class="title-row">
       <h1>メール帯プレビュー検討</h1>
-      <p class="lede">件名案・本文案を入力し、「反映」で選択中のメール帯に赤字部分を差し込みます。</p>
+      <div class="tabs" role="tablist" aria-label="検討案" id="tabs"></div>
     </div>
-    <div class="params" aria-label="仕様パラメータ">
-      <label for="pSubj">件名の赤字 <input id="pSubj" type="number" min="1" max="45"> 文字</label>
-      <label for="pBody">本文の赤字 <input id="pBody" type="number" min="1" max="45"> 文字</label>
-      <label for="pMax">上限 <input id="pMax" type="number" min="1" max="200"> 文字</label>
-      <button class="btn-ghost" id="resetBtn" type="button">サンプルに戻す</button>
-      <button class="btn-ghost" id="clearBtn" type="button">すべて空にする</button>
+    <div class="params" aria-label="表示設定">
+      <label for="pSubj">件名の赤字 <input id="pSubj" type="number" min="1" max="99"> 文字</label>
+      <label for="pBody">本文の赤字 <input id="pBody" type="number" min="1" max="99"> 文字</label>
+      <button class="btn-ghost" id="clearBtn" type="button">この案をすべて空にする</button>
     </div>
   </header>
 
-  <div class="board">
+  <div class="board" role="tabpanel" id="panel">
     <section class="panel" aria-labelledby="pvTitle">
       <h2 id="pvTitle">プレビュー画面</h2>
-      <p class="hint">枠をクリックすると反映先（アクティブ）になります。送り主は直接編集できます。</p>
+      <p class="hint">枠をクリックすると反映先（アクティブ）になります。送り主は直接入力できます。</p>
       <div class="band-label">メール帯</div>
       <div class="bands" id="bands"></div>
     </section>
@@ -131,82 +138,121 @@ h1{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
         <div class="col" id="colSubject"></div>
         <div class="col" id="colBody"></div>
       </div>
-      <p class="status" id="status" role="status" aria-live="polite"></p>
-      <div class="spec">
-        仕様メモ
-        <ul>
-          <li>入力欄は上限文字数まで入力可能。先頭の指定文字数を赤字、それ以降を黒字で表示</li>
-          <li>「反映」で赤字部分のみをアクティブなメール帯へ反映。既に文字がある場合は上書き</li>
-          <li>入力内容はこのブラウザに保存されます（他の人には共有されません）</li>
-        </ul>
-      </div>
     </section>
   </div>
 </div>
 
 <script>
 (() => {
-  const ROWS = 5, BANDS = 4;
-  const SAMPLE = {
-    params:{subj:15, body:16, max:45},
+  const ROWS = 8, BANDS = 4, MAX = 45;
+  const TABS = [
+    { id:"A", label:"A案", title:"業界・職種を変えて、次のステージへ進む人がふえています" },
+    { id:"B", label:"B案", title:"あなたのスキルは、自分で思っているより価値がある" }
+  ];
+  const KEY = "mail-band-preview-v2";
+  const emptyBand = () => ({ sender:"", subject:"", subjectSrc:0, body:"", bodySrc:0 });
+  const emptyPlan = () => ({
     active:0,
-    subjects:[
-      "【本日限定】全品ポイント10倍！週末セールのお知らせと人気ランキング",
-      "会員様だけの特別クーポンをお届けします｜有効期限は今週日曜まで",
-      "秋の新作が入荷しました。スタッフおすすめコーデをご紹介",
-      "", ""
-    ],
-    bodies:[
-      "いつもご利用ありがとうございます。今週末は全品ポイント10倍キャンペーンを開催中です。",
-      "前回ご購入の商品に合わせて、おすすめアイテムをピックアップしました。",
-      "", "", ""
-    ],
-    bands:[
-      {sender:"ABCストア", subject:"【本日限定】全品ポイント10倍！", subjectSrc:1, body:"いつもご利用ありがとうございます。", bodySrc:1},
-      {sender:"トラベル予約ナビ", subject:"", subjectSrc:0, body:"", bodySrc:0},
-      {sender:"フィットネスクラブ", subject:"", subjectSrc:0, body:"", bodySrc:0},
-      {sender:"書店オンライン", subject:"", subjectSrc:0, body:"", bodySrc:0}
-    ]
-  };
-  const KEY = "mail-band-preview-v1";
-  const clone = o => JSON.parse(JSON.stringify(o));
+    subjects:Array(ROWS).fill(""),
+    bodies:Array(ROWS).fill(""),
+    bands:Array.from({length:BANDS}, emptyBand)
+  });
+  const fresh = () => ({ tab:"A", params:{subj:15, body:16}, plans:Object.fromEntries(TABS.map(t => [t.id, emptyPlan()])) });
+
   let state;
-  try { state = JSON.parse(localStorage.getItem(KEY)) || clone(SAMPLE); } catch { state = clone(SAMPLE); }
+  try { state = JSON.parse(localStorage.getItem(KEY)); } catch {}
+  if (!state || !state.plans) state = fresh();
+  TABS.forEach(t => {
+    const p = state.plans[t.id] = state.plans[t.id] || emptyPlan();
+    ["subjects","bodies"].forEach(k => { while (p[k].length < ROWS) p[k].push(""); });
+  });
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  const plan = () => state.plans[state.tab];
 
   const chars = s => Array.from(s || "");
-  const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const $ = id => document.getElementById(id);
 
-  /* ---------- プレビュー ---------- */
+  /* ---------- タブ ---------- */
+  const tabsEl = $("tabs");
+  TABS.forEach(t => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "tab"; b.id = "tab" + t.id;
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-controls", "panel");
+    b.innerHTML = `<b>${t.label}：</b><span>${esc(t.title)}</span>`;
+    b.addEventListener("click", () => { state.tab = t.id; save(); renderAll(); });
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener("keydown", e => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    const i = TABS.findIndex(t => t.id === state.tab);
+    const n = TABS[(i + (e.key === "ArrowRight" ? 1 : TABS.length - 1)) % TABS.length];
+    state.tab = n.id; save(); renderAll(); $("tab" + n.id).focus();
+  });
+  function renderTabs(){
+    TABS.forEach(t => {
+      const b = $("tab" + t.id), on = t.id === state.tab;
+      b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1;
+    });
+    $("panel").setAttribute("aria-labelledby", "tab" + state.tab);
+  }
+
+  /* ---------- プレビュー（DOMは一度だけ作り、中身だけ更新する） ---------- */
   const bandsEl = $("bands");
-  function renderBands(){
-    bandsEl.innerHTML = "";
-    state.bands.forEach((b, i) => {
-      const el = document.createElement("div");
-      el.className = "band" + (i === state.active ? " active" : "");
-      el.tabIndex = 0;
-      el.setAttribute("role", "button");
-      el.setAttribute("aria-pressed", i === state.active);
-      el.setAttribute("aria-label", `メール帯 ${i+1}`);
-      el.innerHTML = `
-        <div class="icon"><span class="badge">反映先</span>アイコン</div>
-        <div class="lines">
-          <div class="pv sender"><input id="sender${i}" value="${esc(b.sender)}" placeholder="送り主" aria-label="送り主 ${i+1}"></div>
-          <div class="pv subject" data-k="subject"><span class="txt ${b.subject ? "" : "empty"}">${b.subject ? esc(b.subject) : "件名"}</span>${b.subjectSrc ? `<span class="src">案${b.subjectSrc}</span>` : ""}</div>
-          <div class="pv body" data-k="body"><span class="txt ${b.body ? "" : "empty"}">${b.body ? esc(b.body) : "本文プレビュー"}</span>${b.bodySrc ? `<span class="src">案${b.bodySrc}</span>` : ""}</div>
-        </div>`;
-      const activate = () => { if (state.active !== i) { state.active = i; save(); renderBands(); renderTarget(); } };
-      el.addEventListener("click", activate);
-      el.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === el) { e.preventDefault(); activate(); } });
-      const s = el.querySelector("input");
-      s.addEventListener("focus", activate);
-      s.addEventListener("input", () => { b.sender = s.value; save(); });
-      bandsEl.appendChild(el);
+  const bandEls = [];
+  for (let i = 0; i < BANDS; i++){
+    const el = document.createElement("div");
+    el.className = "band"; el.tabIndex = 0;
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-label", `メール帯 ${i+1} を反映先にする`);
+    el.innerHTML = `
+      <div class="icon"><span class="badge">反映先</span>アイコン</div>
+      <div class="lines">
+        <div class="pv sender"><input id="sender${i}" placeholder="送り主" aria-label="送り主 ${i+1}" autocomplete="off"></div>
+        <div class="pv subject" data-k="subject"><span class="txt"></span><span class="src"></span><button type="button" class="clear" aria-label="メール帯 ${i+1} の件名をクリア">クリア</button></div>
+        <div class="pv body" data-k="body"><span class="txt"></span><span class="src"></span><button type="button" class="clear" aria-label="メール帯 ${i+1} の本文プレビューをクリア">クリア</button></div>
+      </div>`;
+    el.addEventListener("click", () => setActive(i));
+    el.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === el) { e.preventDefault(); setActive(i); } });
+    const s = el.querySelector("input");
+    s.addEventListener("focus", () => setActive(i));
+    s.addEventListener("input", () => { plan().bands[i].sender = s.value; save(); if (plan().active === i) renderTarget(); });
+    el.querySelectorAll(".clear").forEach(btn => btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const k = btn.parentElement.dataset.k, b = plan().bands[i];
+      b[k] = ""; b[k + "Src"] = 0; save(); renderBand(i);
+    }));
+    bandsEl.appendChild(el); bandEls.push(el);
+  }
+  function renderBand(i){
+    const b = plan().bands[i], el = bandEls[i];
+    const s = el.querySelector("input");
+    if (s.value !== b.sender) s.value = b.sender;
+    [["subject","件名"],["body","本文プレビュー"]].forEach(([k, ph]) => {
+      const pv = el.querySelector(`.pv[data-k="${k}"]`);
+      const txt = pv.querySelector(".txt");
+      txt.textContent = b[k] || ph;
+      txt.classList.toggle("empty", !b[k]);
+      txt.title = b[k] || "";
+      pv.querySelector(".src").textContent = b[k + "Src"] ? `案${b[k + "Src"]}` : "";
+      pv.querySelector(".clear").disabled = !b[k];
     });
   }
+  function setActive(i){
+    if (plan().active === i) return;
+    plan().active = i; save(); renderActive();
+  }
+  function renderActive(){
+    bandEls.forEach((el, i) => {
+      const on = i === plan().active;
+      el.classList.toggle("active", on); el.setAttribute("aria-pressed", on);
+    });
+    renderTarget();
+  }
   function renderTarget(){
-    $("target").innerHTML = `反映先：<b>メール帯 ${state.active+1}</b>（${esc(state.bands[state.active].sender || "送り主未設定")}）`;
+    const p = plan();
+    $("target").innerHTML = `反映先：<b>メール帯 ${p.active+1}</b>（${esc(p.bands[p.active].sender || "送り主未入力")}）`;
   }
 
   /* ---------- 入力欄 ---------- */
@@ -217,96 +263,92 @@ h1{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
     for (let r = 0; r < ROWS; r++){
       const row = document.createElement("div");
       row.className = "row";
-      const id = `${kind}${r}`;
       row.innerHTML = `
         <span class="no">${r+1}</span>
         <div class="field">
           <div class="mirror" aria-hidden="true"></div>
-          <input id="${id}" type="text" autocomplete="off" spellcheck="false" aria-label="${title} ${r+1}" placeholder="${r === 0 && isSubj ? "ユーザー記入欄" : ""}">
+          <textarea id="${kind}${r}" rows="2" autocomplete="off" spellcheck="false" aria-label="${title} ${r+1}" placeholder="${r === 0 ? "ユーザー記入欄" : ""}"></textarea>
           <span class="count"></span>
         </div>
         <button class="reflect" type="button" aria-label="${title} ${r+1} を反映">反映</button>`;
-      const input = row.querySelector("input");
+      const ta = row.querySelector("textarea");
       const mirror = row.querySelector(".mirror");
       const count = row.querySelector(".count");
       const btn = row.querySelector(".reflect");
-      input.value = state[kind][r] || "";
       let composing = false;
 
       const paint = () => {
         const lim = isSubj ? state.params.subj : state.params.body;
-        const cs = chars(input.value);
-        const hot = cs.slice(0, lim).join(""), rest = cs.slice(lim).join("");
-        mirror.innerHTML = `<span class="hot">${esc(hot)}</span>${esc(rest)}`;
-        mirror.scrollLeft = input.scrollLeft;
-        count.textContent = `${cs.length}/${state.params.max}`;
-        count.classList.toggle("full", cs.length >= state.params.max);
+        const cs = chars(ta.value);
+        mirror.innerHTML = `<span class="hot">${esc(cs.slice(0, lim).join(""))}</span>${esc(cs.slice(lim).join(""))}​`;
+        count.textContent = `${cs.length}/${MAX}`;
         btn.disabled = cs.length === 0;
       };
-      const enforce = () => {
-        const cs = chars(input.value);
-        if (cs.length > state.params.max){
-          const pos = input.selectionStart;
-          input.value = cs.slice(0, state.params.max).join("");
-          input.setSelectionRange(Math.min(pos, input.value.length), Math.min(pos, input.value.length));
+      const commit = () => {
+        let v = ta.value.replace(/[\r\n]+/g, "");
+        const cs = chars(v);
+        if (cs.length > MAX) v = cs.slice(0, MAX).join("");
+        if (v !== ta.value){
+          const pos = Math.min(ta.selectionStart, v.length);
+          ta.value = v; ta.setSelectionRange(pos, pos);
         }
-        state[kind][r] = input.value; save();
+        plan()[kind][r] = v; save();
       };
-      input.addEventListener("compositionstart", () => composing = true);
-      input.addEventListener("compositionend", () => { composing = false; enforce(); paint(); });
-      input.addEventListener("input", () => { if (!composing) enforce(); paint(); });
-      ["scroll","keyup","click","select","focus","blur"].forEach(ev => input.addEventListener(ev, () => { mirror.scrollLeft = input.scrollLeft; }));
+      ta.addEventListener("keydown", e => { if (e.key === "Enter" && !e.isComposing) e.preventDefault(); });
+      ta.addEventListener("compositionstart", () => composing = true);
+      ta.addEventListener("compositionend", () => { composing = false; commit(); paint(); });
+      ta.addEventListener("input", () => { if (!composing) commit(); paint(); });
       btn.addEventListener("click", () => reflect(kind, r));
 
-      fields[kind][r] = { input, paint };
+      fields[kind][r] = { ta, paint };
       colEl.appendChild(row);
-      paint();
     }
+  }
+  function renderFields(){
+    ["subjects","bodies"].forEach(k => fields[k].forEach((f, r) => { f.ta.value = plan()[k][r] || ""; f.paint(); }));
   }
 
   function reflect(kind, r){
     const isSubj = kind === "subjects";
     const lim = isSubj ? state.params.subj : state.params.body;
-    const text = chars(state[kind][r]).slice(0, lim).join("");
+    const text = chars(plan()[kind][r]).slice(0, lim).join("");
     if (!text) return;
-    const b = state.bands[state.active];
-    const k = isSubj ? "subject" : "body";
-    const overwrote = !!b[k];
+    const i = plan().active, b = plan().bands[i], k = isSubj ? "subject" : "body";
     b[k] = text; b[k + "Src"] = r + 1;
-    save(); renderBands();
-    const pv = bandsEl.children[state.active].querySelector(`.pv[data-k="${k}"]`);
+    save(); renderBand(i);
+    const pv = bandEls[i].querySelector(`.pv[data-k="${k}"]`);
     pv.classList.add("flash"); setTimeout(() => pv.classList.remove("flash"), 600);
-    $("status").innerHTML = `メール帯 ${state.active+1} の${isSubj ? "件名" : "本文プレビュー"}に<b>${isSubj ? "件名" : "本文"}案${r+1}</b>を${overwrote ? "上書き" : "反映"}しました：「${esc(text)}」`;
   }
 
-  /* ---------- パラメータ ---------- */
-  const pS = $("pSubj"), pB = $("pBody"), pM = $("pMax");
+  /* ---------- 赤字文字数 ---------- */
+  const pS = $("pSubj"), pB = $("pBody");
   function syncParams(){
-    pS.value = state.params.subj; pB.value = state.params.body; pM.value = state.params.max;
-    $("subjectsNote").textContent = `${state.params.max}文字まで・先頭${state.params.subj}文字が赤字`;
-    $("bodiesNote").textContent = `${state.params.max}文字まで・先頭${state.params.body}文字が赤字`;
+    pS.value = state.params.subj; pB.value = state.params.body;
+    $("subjectsNote").textContent = `先頭${state.params.subj}文字が赤字`;
+    $("bodiesNote").textContent = `先頭${state.params.body}文字が赤字`;
   }
   function onParam(){
     const n = (el, d) => Math.max(1, parseInt(el.value, 10) || d);
-    state.params = { subj:n(pS, 15), body:n(pB, 16), max:n(pM, 45) };
+    state.params = { subj:n(pS, 15), body:n(pB, 16) };
     save(); syncParams();
     Object.values(fields).flat().forEach(f => f.paint());
   }
-  [pS, pB, pM].forEach(el => el.addEventListener("change", onParam));
+  [pS, pB].forEach(el => el.addEventListener("change", onParam));
 
-  function boot(){
-    buildCol($("colSubject"), "subjects", "件名案");
-    buildCol($("colBody"), "bodies", "本文Prev");
-    syncParams(); renderBands(); renderTarget();
-    $("status").textContent = "";
-  }
-  $("resetBtn").addEventListener("click", () => { state = clone(SAMPLE); save(); boot(); });
   $("clearBtn").addEventListener("click", () => {
-    state.subjects = Array(ROWS).fill(""); state.bodies = Array(ROWS).fill("");
-    state.bands.forEach(b => { b.subject = ""; b.body = ""; b.subjectSrc = 0; b.bodySrc = 0; });
-    save(); boot();
+    const active = plan().active;
+    state.plans[state.tab] = emptyPlan(); plan().active = active;
+    save(); renderAll();
   });
-  boot();
+
+  function renderAll(){
+    renderTabs(); syncParams(); renderFields();
+    for (let i = 0; i < BANDS; i++) renderBand(i);
+    renderActive();
+  }
+  buildCol($("colSubject"), "subjects", "件名案");
+  buildCol($("colBody"), "bodies", "本文Prev");
+  renderAll();
 })();
 </script>
 </body>
