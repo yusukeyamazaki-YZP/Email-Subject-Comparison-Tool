@@ -57,16 +57,18 @@ h1{font-family:var(--display);font-size:22px;margin:0;white-space:nowrap}
 /* ---------- プレビュー ---------- */
 .band-label{font-size:12px;font-weight:700;color:var(--icon);letter-spacing:.04em;margin-bottom:6px}
 .bands{display:flex;flex-direction:column;gap:10px}
-.band{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;background:var(--surface);transition:box-shadow .15s,border-color .15s}
+.band{display:grid;grid-template-columns:18px 64px 1fr;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;background:var(--surface);transition:box-shadow .15s,border-color .15s}
 .band:hover{border-color:var(--accent)}
 .band:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .band.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.band .num{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--muted);text-align:center}
+.band.active .num{color:var(--accent)}
 .band .icon{width:64px;height:64px;border-radius:50%;background:var(--icon);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;position:relative}
 .band .badge{position:absolute;top:-4px;left:-4px;background:var(--accent);color:var(--accent-fg);font-size:10px;font-weight:700;padding:1px 6px;border-radius:9px;opacity:0;transition:opacity .15s}
 .band.active .badge{opacity:1}
 .band .lines{display:flex;flex-direction:column;gap:4px;min-width:0}
 .pv{background:var(--field);border:1px solid var(--line);border-radius:3px;padding:2px 4px 2px 8px;font-size:12px;min-height:28px;display:flex;align-items:center;gap:6px;min-width:0;transition:background .5s}
-.pv .txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+.pv .txt{white-space:normal;word-break:break-all;overflow-wrap:anywhere;min-width:0;flex:1;line-height:1.45;padding-block:2px}
 .pv .txt.empty{color:var(--muted)}
 .pv.subject .txt:not(.empty){font-weight:700}
 .pv .src{flex:none;font-family:var(--mono);font-size:10px;color:var(--muted)}
@@ -144,7 +146,7 @@ h1{font-family:var(--display);font-size:22px;margin:0;white-space:nowrap}
 
 <script>
 (() => {
-  const ROWS = 8, BANDS = 4, MAX = 45;
+  const ROWS = 8, BANDS = 5, MAX = 45;
   const TABS = [
     { id:"A", label:"A案", title:"業界・職種を変えて、次のステージへ進む人がふえています" },
     { id:"B", label:"B案", title:"あなたのスキルは、自分で思っているより価値がある" }
@@ -165,6 +167,7 @@ h1{font-family:var(--display);font-size:22px;margin:0;white-space:nowrap}
   TABS.forEach(t => {
     const p = state.plans[t.id] = state.plans[t.id] || emptyPlan();
     ["subjects","bodies"].forEach(k => { while (p[k].length < ROWS) p[k].push(""); });
+    while (p.bands.length < BANDS) p.bands.push(emptyBand());
   });
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
   const plan = () => state.plans[state.tab];
@@ -207,6 +210,7 @@ h1{font-family:var(--display);font-size:22px;margin:0;white-space:nowrap}
     el.setAttribute("role", "button");
     el.setAttribute("aria-label", `メール帯 ${i+1} を反映先にする`);
     el.innerHTML = `
+      <div class="num" aria-hidden="true">${i+1}</div>
       <div class="icon"><span class="badge">反映先</span>アイコン</div>
       <div class="lines">
         <div class="pv sender"><input id="sender${i}" placeholder="送り主" aria-label="送り主 ${i+1}" autocomplete="off"></div>
