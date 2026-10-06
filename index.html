@@ -153,25 +153,62 @@ h1{font-family:var(--display);font-size:22px;margin:0;white-space:nowrap}
     { id:"A", label:"A案", title:"業界・職種を変えて、次のステージへ進む人がふえています" },
     { id:"B", label:"B案", title:"あなたのスキルは、自分で思っているより価値がある" }
   ];
-  const KEY = "mail-band-preview-v2";
-  const emptyBand = () => ({ sender:"", subject:"", subjectSrc:0, body:"", bodySrc:0 });
+  const emptyBand = (sender = "") => ({ sender, subject:"", subjectSrc:0, body:"", bodySrc:0 });
   const emptyPlan = () => ({
     active:0,
     subjects:Array(ROWS).fill(""),
     bodies:Array(ROWS).fill(""),
-    bands:Array.from({length:BANDS}, emptyBand)
+    bands:Array.from({length:BANDS}, () => emptyBand())
   });
-  const fresh = () => ({ tab:"A", params:{subj:15, body:16}, plans:Object.fromEntries(TABS.map(t => [t.id, emptyPlan()])) });
+  const pad = (a, n) => a.concat(Array(Math.max(0, n - a.length)).fill(""));
 
-  let state;
-  try { state = JSON.parse(localStorage.getItem(KEY)); } catch {}
-  if (!state || !state.plans) state = fresh();
-  TABS.forEach(t => {
-    const p = state.plans[t.id] = state.plans[t.id] || emptyPlan();
-    ["subjects","bodies"].forEach(k => { while (p[k].length < ROWS) p[k].push(""); });
-    while (p.bands.length < BANDS) p.bands.push(emptyBand());
-  });
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  /* デフォルト値：ページを開く／更新するたびにこの内容から始まる */
+  const DEFAULT_SENDER = "フルキャスト 山崎";
+  const DEFAULT_BODIES = [
+    "フルキャストで副業をされている方限定で",
+    "正社員として働きながら副業で稼ぐ以外にも、"
+  ];
+  const DEFAULTS = {
+    A:{
+      active:1,
+      subjects:[
+        "別の業界・職種に挑戦できる方法",
+        "別の業界・職種を考慮した方がいい理由",
+        "異業種への挑戦が増えてる理由",
+        "ジョブチェンジが盛んな理由",
+        "なぜ？業界・職種を変えて、次のステージへ進む人が増えています",
+        "今の本業をガラっと変える人が増えています",
+        "業界・職種の壁を越えて次のステージへ進む人が増えています",
+        "業界・職種を変えて、次のステージへ進む人が増えています"
+      ],
+      bodies:DEFAULT_BODIES
+    },
+    B:{
+      active:4,
+      subjects:[
+        "あなたの経験を評価しなおす方法",
+        "なぜ今、経験の可視化が重要なのか",
+        "未経験可の求人が増えている理由",
+        "あなたのスキルは、自分で思っているより価値がある",
+        "その経験、思ってるより価値があります",
+        "あなたのご経験は武器になります。"
+      ],
+      bodies:DEFAULT_BODIES
+    }
+  };
+  const defaultPlan = id => {
+    const d = DEFAULTS[id];
+    return {
+      active:d.active,
+      subjects:pad(d.subjects, ROWS),
+      bodies:pad(d.bodies, ROWS),
+      bands:Array.from({length:BANDS}, () => emptyBand(DEFAULT_SENDER))
+    };
+  };
+
+  /* 状態は保存しない（更新すると常にデフォルト値に戻る） */
+  const state = { tab:"A", params:{subj:15, body:16}, plans:Object.fromEntries(TABS.map(t => [t.id, defaultPlan(t.id)])) };
+  const save = () => {};
   const plan = () => state.plans[state.tab];
 
   const chars = s => Array.from(s || "");
